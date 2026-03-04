@@ -1,0 +1,35 @@
+@page
+@model MyApp.Pages.IndexModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Task Tracker</title>
+</head>
+<body>
+    <h1>Task Tracker Users</h1>
+
+    @* Display any database errors *@
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div style="color:red; font-weight:bold;">
+            Database error: @Model.ErrorMessage
+        </div>
+    }
+
+    @* Display users in a list *@
+    <ul>
+        @foreach (var user in Model.Users)
+        {
+            <li>@user.Name (@user.Email)</li>
+        }
+    </ul>
+
+    @* Optional: message if no users exist *@
+    @if (!Model.Users.Any())
+    {
+        <p>No users yet.</p>
+    }
+</body>
+</html>

@@ -1,14 +1,38 @@
-namespace task_tracker;
+using Microsoft.EntityFrameworkCore;
+using task_tracker.Data;
 
-public class Program
+namespace MyApp
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-        app.MapGet("/", () => "Hello World!");
+            builder.Services.AddRazorPages();
 
-        app.Run();
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            var app = builder.Build();
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            // app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapRazorPages();
+
+            app.Run();
+        }
     }
 }
